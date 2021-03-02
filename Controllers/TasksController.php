@@ -2,21 +2,19 @@
 
 namespace Mvc\Controllers;
 
-use Mvc\Models\Task;
 use Mvc\Core\Controller;
-use Mvc\Core\ResourceModel as ResourceModel;
 use Mvc\Models\TaskRepository;
 use Mvc\Models\TaskModel;
 
 class TasksController extends Controller
 {
-    public $taskRepo;
+    private $taskRepo;
 
     public function __construct(){
         $this->taskRepo = new TaskRepository;
     }
 
-    function index()
+    public function index()
     {
 
         $d['tasks'] = $this->taskRepo->getAll();
@@ -24,7 +22,7 @@ class TasksController extends Controller
         $this->render("index");
     }
 
-    function create()
+    public function create()
     {
         if (isset($_POST["title"]))
         {
@@ -42,7 +40,7 @@ class TasksController extends Controller
         $this->render("create");
     }
 
-    function edit($id)
+    public function edit($id)
     {   
         $d["task"] = $this->taskRepo->get($id);
 
@@ -63,7 +61,7 @@ class TasksController extends Controller
         $this->render("edit");
     }
 
-    function delete($id)
+    public function delete($id)
     {
         $taskModel = new TaskModel();
         $taskModel->id = $id;
