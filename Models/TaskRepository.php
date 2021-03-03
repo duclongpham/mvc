@@ -2,37 +2,86 @@
 
 namespace Mvc\Models;
 
-use Mvc\Models\TaskResourceModel;
+use Mvc\Config\Database;
+use PDO;
 
 class TaskRepository
 {
-    private $taskRepository;
+    private $table;
+    private $id;
 
     public function __construct() {
-        $this->taskRepository = new TaskResourceModel('tasks', 'id', new TaskModel);
+        $this->table = 'tasks';
+        $this->id = 'id';
     }
     public function add($model)
     {
-        return $this->taskRepository->save($model);
+        $data = $model->getProperties();
+        foreach ($data as $k => $v) {
+            if (is_null($v)) {
+                unset($data[$k]);
+            }
+        }
+
+        $query = Database::queryBuilder()
+        ->insert($this->table);
+
+        foreach ($data as $k => $v) {
+            $query = $query->setValue($k, ':'.$k)
+            ->setParameter(':'.$k, $v);
+        }
+
+        return $query->execute();
     }
 
     public function edit($model)
     {
-        return $this->taskRepository->save($model);
+        $data = $model->getProperties();
+        foreach ($data as $k => $v) {
+            if (is_null($v)) {
+                unset($data[$k]);
+            }
+        }
+
+        $query = Database::queryBuilder()
+        ->update($this->table);
+
+        foreach ($data as $k => $v) {
+            $query = $query->set($k, ':'.$k)
+            ->setParameter(':'.$k, $v);
+        }
+
+        return $query->execute();
     }
 
     public function delete($model)
     {
-        return $this->taskRepository->delete($model->id);
+        $data = $model->getProperties();
+
+        return Database::queryBuilder()
+        ->delete($this->table)
+        ->where($this->id . " = :" . $this->id)
+        ->setParameter($this->id, $data['id'])
+        ->execute();
     }
 
     public function get($id)
     {
-        return $this->taskRepository->find($id);
+        return Database::queryBuilder()
+        ->select('*')
+        ->from($this->table)
+        ->where($this->id . " = :" . $this->id)
+        ->setParameter($this->id, $id)
+        ->execute()
+        ->fetch(PDO::FETCH_OBJ);
     }
 
     public function getAll()
     {
-        return $this->taskRepository->all();
+        return Database::queryBuilder()
+        ->select('*')
+        ->from($this->table)
+        ->execute()
+        ->fetchAll(PDO::FETCH_OBJ);
     }
 }
