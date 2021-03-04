@@ -25,6 +25,6 @@ class TaskModel extends Model
      */
     public function __set($key, $value)
     {
-        $this->$key = $value;
+        $this->$key = htmlspecialchars($value);
     }
 }
