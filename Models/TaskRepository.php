@@ -49,6 +49,10 @@ class TaskRepository
     public function edit($model)
     {
         $data = $model->getProperties();
+        $id = $data['id'];
+
+        if(is_null($id)) return false;
+
         foreach ($data as $k => $v) {
             if (is_null($v)) {
                 unset($data[$k]);
@@ -63,6 +67,9 @@ class TaskRepository
             ->setParameter(':'.$k, $v);
         }
 
+        $query = $query->where($this->id . " = :" . $this->id)
+        ->setParameter(':'.$this->id, $id);
+        
         return $query->execute();
     }
 
