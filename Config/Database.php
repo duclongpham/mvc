@@ -27,7 +27,11 @@ class Database
         return self::$bdd;
     }
 
+    /**
+     * @return object queryBuilder of the doctrine
+     */
     public static function queryBuilder() { 
+        
         return self::getBdd()->createQueryBuilder();
     }
 }

@@ -10,10 +10,18 @@ class TaskRepository
     private $table;
     private $id;
 
+    /**
+     * @todo set default table and id name
+     */
     public function __construct() {
         $this->table = 'tasks';
         $this->id = 'id';
     }
+
+    /**
+     * @param object $model
+     * @return bool
+     */
     public function add($model)
     {
         $data = $model->getProperties();
@@ -34,6 +42,10 @@ class TaskRepository
         return $query->execute();
     }
 
+    /**
+     * @param object $model
+     * @return bool
+     */
     public function edit($model)
     {
         $data = $model->getProperties();
@@ -54,6 +66,10 @@ class TaskRepository
         return $query->execute();
     }
 
+    /**
+     * @param object $model
+     * @return bool
+     */
     public function delete($model)
     {
         $data = $model->getProperties();
@@ -65,6 +81,10 @@ class TaskRepository
         ->execute();
     }
 
+    /**
+     * @param string/int $id
+     * @return object
+     */
     public function get($id)
     {
         return Database::queryBuilder()
@@ -76,6 +96,9 @@ class TaskRepository
         ->fetch(PDO::FETCH_OBJ);
     }
 
+    /**
+     * @return object
+     */
     public function getAll()
     {
         return Database::queryBuilder()
