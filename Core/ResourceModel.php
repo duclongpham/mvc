@@ -18,6 +18,11 @@ class ResourceModel implements ResourceModelInterface
         $this->id = $id;
         $this->model = $model;
     }
+
+    /**
+     * @param object $model
+     * @return bool
+     */
     public function save($model)
     {
         $getData = $model->getProperties();
@@ -49,6 +54,11 @@ class ResourceModel implements ResourceModelInterface
 
         return $db->execute(array_combine($placeholder, $value));
     }
+
+    /**
+     * @param string/int $id
+     * @return bool
+     */
     public function delete($id)
     {
         $sql = "DELETE FROM " . $this->table . " WHERE " . $this->id . " = ?";
@@ -56,6 +66,11 @@ class ResourceModel implements ResourceModelInterface
 
         return $db->execute([$id]);
     }
+
+    /**
+     * @param string/int $id
+     * @return object
+     */
     public function find($id)
     {
         $sql = "SELECT * FROM " . $this->table . " WHERE " . $this->id . " = ?";
@@ -64,6 +79,10 @@ class ResourceModel implements ResourceModelInterface
 
         return $db->fetch();
     }
+
+    /**
+     * @return object
+     */
     public function all()
     {
         $sql = "SELECT * FROM " . $this->table;
